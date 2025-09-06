@@ -16,39 +16,39 @@ export async function GET() {
       (c) => c.status === "Resolved" || c.status === "Closed"
     ).length;
 
-    // Calculate average response time (in hours, for example)
-    let totalResponseTime = 0;
-    let countWithResponse = 0;
+    let totalResolutionTime = 0;
+    console.log(allComplaints.resolutionTimeMinutes)
 
+    // Sum up all resolution times (in minutes)
     allComplaints.forEach((c) => {
-      if (c.createdAt && c.resolvedAt) {
-        const created = new Date(c.createdAt);
-        const resolved = new Date(c.resolvedAt);
-        const diffHours = (resolved - created) / (1000 * 60 * 60); // ms → hours
-        totalResponseTime += diffHours;
-        countWithResponse++;
+      if (c.resolutionTimeMinutes) {
+        totalResolutionTime += c.resolutionTimeMinutes;
       }
     });
 
-    const averageResponseTime =
-      countWithResponse > 0
-        ? (totalResponseTime / countWithResponse).toFixed(2)
+    console.log("Total resolution time (minutes):", totalResolutionTime);
+
+    // Average over **all complaints**, including those with 0 resolution time
+    const averageResolutionTime =
+      allComplaints.length > 0
+        ? (totalResolutionTime / allComplaints.length).toFixed(2)
         : null;
 
-        console.log(allComplaints)
+    console.log("Average resolution time (minutes):", averageResolutionTime);
+
+    // console.log(allComplaints);
 
     return NextResponse.json(
       {
         summary: {
           totalProblems,
           problemsResolved,
-          averageResponseTime,
+          averageResolutionTime,
         },
-        data:allComplaints,
+        data: allComplaints,
       },
       { status: 200 }
     );
-    
   } catch (error) {
     console.error("Error fetching complaints:", error);
     return NextResponse.json(
