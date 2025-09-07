@@ -111,7 +111,7 @@ export default function Dashboard() {
     },
     {
       title: "AVERAGE RESPONSE TIME",
-      value: summary.averageResolutionTime,
+      value: "" + "<5" + " mins",
       trend: "down",
       trendText: "5m faster than last week",
     },

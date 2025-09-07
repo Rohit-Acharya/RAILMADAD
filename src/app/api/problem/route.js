@@ -12,6 +12,7 @@ export async function GET() {
 
     // === Summary stats ===
     const totalProblems = allComplaints.length;
+    console.log("Total problems:", totalProblems);
 const problemsResolved = allComplaints.filter(c => c.resolved === true).length;
 
     console.log("Problems resolved:", problemsResolved);
