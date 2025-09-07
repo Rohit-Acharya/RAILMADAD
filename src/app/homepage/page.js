@@ -29,27 +29,38 @@ function Loading() {
         return prev + Math.random() * 15;
       });
     }, 300);
+
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div
-      className="fixed inset-0 bg-cover bg-center flex items-center justify-center flex-col z-50"
+      className="fixed inset-0 bg-cover bg-top sm:bg-center flex items-center justify-center flex-col z-50"
       style={{
         backgroundImage:
           "url('https://akm-img-a-in.tosshub.com/businesstoday/images/story/202408/66baf0c1e6330-indian-railways-cancels-rs-30-000-crore-tender-for-100-vande-bharat-trains-133600489-16x9.jpg?size=948:533')",
       }}
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-white"></div>
-      <div className="relative z-10 bg-white/20 backdrop-blur-md rounded-2xl shadow-xl p-8 text-center max-w-md w-full">
-        <div className="loader-spinner w-16 h-16 border-4 border-white/60 border-t-transparent rounded-full animate-spin mx-auto mb-6 shadow-lg shadow-white/30"></div>
-        <h2 className="text-3xl font-bold text-black drop-shadow-lg mb-2">
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/40 to-white/90 backdrop-blur-sm"></div>
+
+      {/* Loading Box */}
+      <div className="relative z-10 bg-white/30 backdrop-blur-lg rounded-xl shadow-lg p-6 sm:p-8 text-center w-11/12 max-w-md mx-auto">
+        {/* Spinner */}
+        <div className="loader-spinner w-14 h-14 sm:w-16 sm:h-16 border-4 border-white/50 border-t-transparent rounded-full animate-spin mx-auto mb-4 sm:mb-6"></div>
+
+        {/* Heading */}
+        <h2 className="text-xl sm:text-3xl font-bold text-black drop-shadow mb-1 sm:mb-2">
           Rail Madad Control Room
         </h2>
-        <p className="text-black/90 text-sm mb-6">
+
+        {/* Subheading */}
+        <p className="text-black/80 text-xs sm:text-sm mb-4 sm:mb-6">
           Initializing systems and loading data...
         </p>
-        <div className="w-full h-3 bg-white/20 rounded-full overflow-hidden">
+
+        {/* Progress Bar */}
+        <div className="w-full h-2 sm:h-3 bg-white/30 rounded-full overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 transition-all duration-500"
             style={{ width: `${progress}%` }}
@@ -59,6 +70,8 @@ function Loading() {
     </div>
   );
 }
+
+
 
 export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
@@ -146,8 +159,8 @@ export default function Dashboard() {
                 <li key={index}>
                   <button
                     className={`w-full text-left flex items-center p-4 rounded-xl transition-all duration-200 ${activeTab === item.name
-                        ? "bg-amber-300 text-gray-900 border-l-4 border-amber-600 font-bold shadow-md"
-                        : "hover:bg-white/20 hover:border-l-4 hover:border-amber-400/50"
+                      ? "bg-amber-300 text-gray-900 border-l-4 border-amber-600 font-bold shadow-md"
+                      : "hover:bg-white/20 hover:border-l-4 hover:border-amber-400/50"
                       }`}
                     onClick={() => setActiveTab(item.name)}
                   >
@@ -232,69 +245,54 @@ export default function Dashboard() {
                 <h2 className="text-lg font-semibold text-gray-800 mb-4">
                   Recent Problems
                 </h2>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
+                <div className="w-full overflow-x-auto">
+                  <table className="min-w-[1000px] text-sm">
                     <thead>
-                      <tr className="text-left border-b text-gray-600 text-sm">
+                      <tr className="text-left border-b text-gray-600 text-sm sticky top-0 bg-white">
                         <th className="pb-3">Train No.</th>
                         <th className="pb-3">Coach No.</th>
                         <th className="pb-3">PNR No.</th>
-                        <th className="pb-3">User mobile</th>
+                        <th className="pb-3">User Mobile</th>
                         <th className="pb-3">Complaint Details</th>
                         <th className="pb-3">Assigned Details</th>
                         <th className="pb-3">Status</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {problems.length === 0 ? (
-                        <tr>
-                          <td
-                            colSpan={7}
-                            className="text-center py-6 text-gray-500"
-                          >
-                            No data available
+                      {problems.map((problem, index) => (
+                        <tr key={index} className="border-b hover:bg-gray-50">
+                          <td className="py-2 text-xs sm:text-sm">{problem.trainNo}</td>
+                          <td className="py-2 text-xs sm:text-sm">{problem.coachNo}</td>
+                          <td className="py-2 text-xs sm:text-sm">{problem.pnrNumber}</td>
+                          <td className="py-2 text-xs sm:text-sm">{problem.userPhone}</td>
+                          <td className="py-2 text-xs sm:text-sm">{problem.details}</td>
+                          <td className="py-2 text-xs sm:text-sm">
+                            <div className="font-medium text-gray-800">
+                              Name: {problem.assignedTo?.name || "-"}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              Mobile: {problem.assignedTo?.phone || "-"}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              Department: {problem.assignedTo?.department || "-"}
+                            </div>
+                          </td>
+                          <td className="py-2 text-xs sm:text-sm">
+                            <span
+                              className={`px-3 py-1 rounded-full text-xs ${problem.resolved === false
+                                  ? "bg-red-100 text-red-800"
+                                  : "bg-green-100 text-green-800"
+                                }`}
+                            >
+                              {problem.resolved === false ? "Unresolved" : "Resolved"}
+                            </span>
                           </td>
                         </tr>
-                      ) : (
-                        problems.map((problem, index) => (
-                          <tr
-                            key={index}
-                            className="border-b hover:bg-gray-50 text-sm"
-                          >
-                            <td className="py-4">{problem.trainNo}</td>
-                            <td className="py-4">{problem.coachNo}</td>
-                            <td className="py-4">{problem.pnrNumber}</td>
-                            <td className="py-4">{problem.userPhone}</td>
-                            <td className="py-4">{problem.details}</td>
-                            <td className="py-4">
-                              <div className="font-medium text-gray-800">
-                                Name: {problem.assignedTo?.name || "-"}
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                Mobile: {problem.assignedTo?.phone || "-"}
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                Department: {problem.assignedTo?.department || "-"}
-                              </div>
-                            </td>
-                            <td className="py-4">
-                              <span
-                                className={`px-3 py-1 rounded-full text-xs ${problem.resolved === false
-                                    ? "bg-red-100 text-red-800"
-                                    : "bg-green-100 text-green-800"
-                                  }`}
-                              >
-                                {problem.resolved === false ? "Unresolved" : "Resolved"}
-                              </span>
-
-
-                            </td>
-                          </tr>
-                        ))
-                      )}
+                      ))}
                     </tbody>
                   </table>
                 </div>
+
               </div>
             </>
           )}
