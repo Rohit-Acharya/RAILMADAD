@@ -98,15 +98,9 @@ export default function Dashboard() {
     },
     {
       title: "AVERAGE RESPONSE TIME",
-      value: summary.averageResponseTime,
+      value: summary.averageResolutionTime,
       trend: "down",
       trendText: "5m faster than last week",
-    },
-    {
-      title: "PRIORITY ISSUES",
-      value: "",
-      trend: "up",
-      trendText: "3 urgent issues",
     },
   ];
 
@@ -125,9 +119,8 @@ export default function Dashboard() {
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
       <aside
-        className={`fixed md:relative w-72 text-white p-5 h-full z-40 transition-transform duration-300 ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-        }`}
+        className={`fixed md:relative w-72 text-white p-5 h-full z-40 transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+          }`}
         style={{
           backgroundImage:
             "linear-gradient(rgba(0, 35, 80, 0.85), rgba(0, 35, 80, 0.85)), url('/rail.png')",
@@ -152,11 +145,10 @@ export default function Dashboard() {
               {navItems.map((item, index) => (
                 <li key={index}>
                   <button
-                    className={`w-full text-left flex items-center p-4 rounded-xl transition-all duration-200 ${
-                      activeTab === item.name
+                    className={`w-full text-left flex items-center p-4 rounded-xl transition-all duration-200 ${activeTab === item.name
                         ? "bg-amber-300 text-gray-900 border-l-4 border-amber-600 font-bold shadow-md"
                         : "hover:bg-white/20 hover:border-l-4 hover:border-amber-400/50"
-                    }`}
+                      }`}
                     onClick={() => setActiveTab(item.name)}
                   >
                     <span className="mr-4">{item.icon}</span>
@@ -220,14 +212,12 @@ export default function Dashboard() {
                       {stat.value}
                     </div>
                     <div
-                      className={`text-xs flex items-center ${
-                        stat.trend === "up" ? "text-green-500" : "text-red-500"
-                      }`}
+                      className={`text-xs flex items-center ${stat.trend === "up" ? "text-green-500" : "text-red-500"
+                        }`}
                     >
                       <span
-                        className={`mr-1 ${
-                          stat.trend === "down" ? "transform rotate-180" : ""
-                        }`}
+                        className={`mr-1 ${stat.trend === "down" ? "transform rotate-180" : ""
+                          }`}
                       >
                         ↑
                       </span>
@@ -289,16 +279,15 @@ export default function Dashboard() {
                             </td>
                             <td className="py-4">
                               <span
-                                className={
-                                  problem.status === "New"
-                                    ? "bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs"
-                                    : problem.status === "In Progress"
-                                    ? "bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs"
-                                    : "bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs"
-                                }
+                                className={`px-3 py-1 rounded-full text-xs ${problem.resolved === false
+                                    ? "bg-red-100 text-red-800"
+                                    : "bg-green-100 text-green-800"
+                                  }`}
                               >
-                                {problem.status}
+                                {problem.resolved === false ? "Unresolved" : "Resolved"}
                               </span>
+
+
                             </td>
                           </tr>
                         ))

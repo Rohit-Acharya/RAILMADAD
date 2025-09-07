@@ -7,17 +7,17 @@ export async function GET() {
     await connectDB();
 
     // Fetch all complaints
-    const allComplaints = await Complaints.find();
+   const allComplaints = await Complaints.find().sort({ createdAt: -1 });
+
 
     // === Summary stats ===
     const totalProblems = allComplaints.length;
+const problemsResolved = allComplaints.filter(c => c.resolved === true).length;
 
-    const problemsResolved = allComplaints.filter(
-      (c) => c.status === "Resolved" || c.status === "Closed"
-    ).length;
+    console.log("Problems resolved:", problemsResolved);
 
     let totalResolutionTime = 0;
-    console.log(allComplaints.resolutionTimeMinutes)
+    // console.log(allComplaints.resolutionTimeMinutes)
 
     // Sum up all resolution times (in minutes)
     allComplaints.forEach((c) => {
